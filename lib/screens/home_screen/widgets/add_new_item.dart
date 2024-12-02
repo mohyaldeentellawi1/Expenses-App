@@ -47,7 +47,8 @@ class _AddNewItemState extends State<AddNewItem> {
             top: MediaQuery.of(context).size.height * .01,
             start: MediaQuery.of(context).size.width * .025,
             end: MediaQuery.of(context).size.width * .025,
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).size.height * .025),
+            bottom: MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).size.height * .025),
         child: Column(
           children: [
             Row(
@@ -71,11 +72,10 @@ class _AddNewItemState extends State<AddNewItem> {
             Row(
               children: [
                 Container(
-                  margin:
-                       EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * .025, 
-                       bottom: MediaQuery.of(context).size.height * .02),
+                  margin: EdgeInsetsDirectional.only(
+                      start: MediaQuery.of(context).size.width * .025,
+                      bottom: MediaQuery.of(context).size.height * .02),
                   child: DropdownButton(
-                  
                     alignment: Alignment.center,
                     icon: const Icon(FontAwesomeIcons.list),
                     borderRadius: BorderRadius.circular(10),
@@ -104,7 +104,7 @@ class _AddNewItemState extends State<AddNewItem> {
                         .toList(),
                   ),
                 ),
-                 SizedBox(width: MediaQuery.of(context).size.width * .03),
+                SizedBox(width: MediaQuery.of(context).size.width * .03),
                 CustomTextField(
                   controller: amountController,
                   width: MediaQuery.of(context).size.width * .35,
@@ -114,9 +114,9 @@ class _AddNewItemState extends State<AddNewItem> {
                       const TextInputType.numberWithOptions(decimal: true),
                 ),
                 Container(
-                  margin:
-                       EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * .05,
-                       bottom:   MediaQuery.of(context).size.height * .01),
+                  margin: EdgeInsetsDirectional.only(
+                      start: MediaQuery.of(context).size.width * .05,
+                      bottom: MediaQuery.of(context).size.height * .01),
                   child: DropdownButton(
                       icon: const Icon(FontAwesomeIcons.list),
                       borderRadius: BorderRadius.circular(10),
@@ -146,23 +146,23 @@ class _AddNewItemState extends State<AddNewItem> {
                 )
               ],
             ),
-            Platform.isIOS ? iosDataPicker(context):
-            andriodDatePicker(context),
-            SizedBox(height:   MediaQuery.of(context).size.height * .025),
+            Platform.isIOS
+                ? iosDataPicker(context)
+                : andriodDatePicker(context),
+            SizedBox(height: MediaQuery.of(context).size.height * .025),
             Container(
               margin: EdgeInsetsDirectional.only(
                   bottom: MediaQuery.of(context).size.height * .03),
               width: MediaQuery.of(context).size.width * .8,
-              height:   MediaQuery.of(context).size.height * .05,
+              height: MediaQuery.of(context).size.height * .05,
               child: ElevatedButton(
                 style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))
-                  ),
-                  backgroundColor: MaterialStatePropertyAll(
-                      myColorScheme.onPrimaryContainer),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0))),
+                  backgroundColor:
+                      WidgetStatePropertyAll(myColorScheme.onPrimaryContainer),
                   foregroundColor:
-                      MaterialStatePropertyAll(myColorScheme.onPrimary),
+                      WidgetStatePropertyAll(myColorScheme.onPrimary),
                 ),
                 onPressed: () {
                   onSaved();
@@ -181,70 +181,70 @@ class _AddNewItemState extends State<AddNewItem> {
 
   OutlinedButton andriodDatePicker(BuildContext context) {
     return OutlinedButton.icon(
-       style: ButtonStyle(
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(0),
-          ),
-        )
+      style: ButtonStyle(
+          shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+      )),
+      onPressed: () async {
+        final now = DateTime.now();
+        final firstDate = DateTime(now.year - 1, now.month, now.day);
+        final peckedDate = await showDatePicker(
+            context: context,
+            initialDate: now,
+            firstDate: firstDate,
+            lastDate: now);
+        setState(() {
+          _selectedDate = peckedDate;
+        });
+      },
+      icon: const Icon(CupertinoIcons.calendar_circle),
+      label: Text(
+        _selectedDate == null
+            ? 'No Date Selected'
+            : formatter.format(_selectedDate!),
       ),
-            onPressed: () async {
-              final now = DateTime.now();
-              final firstDate = DateTime(now.year - 1, now.month, now.day);
-              final peckedDate = await showDatePicker(
-                  context: context,
-                  initialDate: now,
-                  firstDate: firstDate,
-                  lastDate: now);
-              setState(() {
-                _selectedDate = peckedDate;
-              });
-            },
-            icon: const Icon(CupertinoIcons.calendar_circle),
-            label: Text(
-              _selectedDate == null
-                  ? 'No Date Selected'
-                  : formatter.format(_selectedDate!),
-            ),
-          );
+    );
   }
 
   OutlinedButton iosDataPicker(BuildContext context) {
     return OutlinedButton.icon(
       style: ButtonStyle(
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(0),
-          ),
-        )
+          shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+      )),
+      onPressed: () async {
+        final now = DateTime.now();
+        final firstDate = DateTime(now.year - 1, now.month, now.day);
+        await showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return Container(
+              height: MediaQuery.of(context).size.height * .3,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                  initialDateTime: now,
+                  minimumDate: firstDate,
+                  mode: CupertinoDatePickerMode.date,
+                  onDateTimeChanged: (peckedDate) {
+                    setState(() {
+                      _selectedDate = peckedDate;
+                    });
+                  }),
+            );
+          },
+        );
+      },
+      icon: const Icon(CupertinoIcons.calendar_circle),
+      label: Text(
+        _selectedDate == null
+            ? 'No Date Selected'
+            : formatter.format(_selectedDate!),
       ),
-            onPressed: () async {
-              final now = DateTime.now();
-              final firstDate = DateTime(now.year - 1, now.month, now.day);
-               await showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height * .3,
-                      color: Colors.white,
-                      child: CupertinoDatePicker(
-                        initialDateTime: now,
-                        minimumDate: firstDate,
-                         mode: CupertinoDatePickerMode.date,
-                        onDateTimeChanged: (peckedDate){
-                        setState(() {
-                          _selectedDate = peckedDate;
-                        });
-                      }),
-                    );
-                  },
-                  );
-            },
-            icon: const Icon(CupertinoIcons.calendar_circle),
-            label: Text(
-              _selectedDate == null
-                  ? 'No Date Selected'
-                  : formatter.format(_selectedDate!),
-            ),
-          );
+    );
   }
 
   onSaved() async {

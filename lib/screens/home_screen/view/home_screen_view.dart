@@ -111,9 +111,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   child: TextButton.icon(
                     style: ButtonStyle(
                         overlayColor:
-                            const MaterialStatePropertyAll(Colors.transparent),
+                            const WidgetStatePropertyAll(Colors.transparent),
                         foregroundColor:
-                            MaterialStatePropertyAll(myColorScheme.onPrimary)),
+                            WidgetStatePropertyAll(myColorScheme.onPrimary)),
                     onPressed: onPressed,
                     icon: const Icon(FontAwesomeIcons.plus),
                     label: Text(S.of(context).add),
@@ -123,9 +123,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   child: TextButton.icon(
                     style: ButtonStyle(
                         overlayColor:
-                            const MaterialStatePropertyAll(Colors.transparent),
+                            const WidgetStatePropertyAll(Colors.transparent),
                         foregroundColor:
-                            MaterialStatePropertyAll(myColorScheme.onPrimary)),
+                            WidgetStatePropertyAll(myColorScheme.onPrimary)),
                     onPressed: () {
                       if (isArabic()) {
                         context
